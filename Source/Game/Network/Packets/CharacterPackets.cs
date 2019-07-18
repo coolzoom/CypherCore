@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,9 +41,9 @@ namespace Game.Network.Packets
         {
             _worldPacket.WriteBit(Success);
             _worldPacket.WriteBit(IsDeletedCharacters);
-            _worldPacket.WriteBit(IsDemonHunterCreationAllowed);
+            _worldPacket.WriteBit(IsTestDemonHunterCreationAllowed);
             _worldPacket.WriteBit(HasDemonHunterOnRealm);
-            _worldPacket.WriteBit(Unknown7x);
+            _worldPacket.WriteBit(IsDemonHunterCreationAllowed);
             _worldPacket.WriteBit(DisabledClassesMask.HasValue);
             _worldPacket.WriteBit(IsAlliedRacesCreationAllowed);
             _worldPacket.WriteUInt32(Characters.Count);
@@ -62,9 +62,9 @@ namespace Game.Network.Packets
 
         public bool Success;
         public bool IsDeletedCharacters; // used for character undelete list
-        public bool IsDemonHunterCreationAllowed = false; //used for demon hunter early access
+        public bool IsTestDemonHunterCreationAllowed = false; //allows client to skip 1 per realm and level 70 requirements
         public bool HasDemonHunterOnRealm = false;
-        public bool Unknown7x = false;
+        public bool IsDemonHunterCreationAllowed = false; //used for demon hunter early access
         public bool IsAlliedRacesCreationAllowed = false;
 
         public int MaxCharacterLevel = 1;
@@ -182,6 +182,7 @@ namespace Game.Network.Packets
             public void Write(WorldPacket data)
             {
                 data.WritePackedGuid(Guid);
+                data.WriteUInt64(GuildClubMemberID);
                 data.WriteUInt8(ListPosition);
                 data.WriteUInt8(RaceId);
                 data.WriteUInt8(ClassId);
@@ -228,6 +229,7 @@ namespace Game.Network.Packets
             }
 
             public ObjectGuid Guid;
+            public ulong GuildClubMemberID; // same as bgs.protocol.club.v1.MemberId.unique_id, guessed basing on SMSG_QUERY_PLAYER_NAME_RESPONSE (that one is known)
             public string Name;
             public byte ListPosition; // Order of the characters in list
             public byte RaceId;
@@ -306,7 +308,9 @@ namespace Game.Network.Packets
         {
             CreateInfo = new CharacterCreateInfo();
             uint nameLength = _worldPacket.ReadBits<uint>(6);
-            CreateInfo.TemplateSet.HasValue = _worldPacket.HasBit();
+            bool hasTemplateSet = _worldPacket.HasBit();
+            CreateInfo.IsTrialBoost = _worldPacket.HasBit();
+
             CreateInfo.RaceId = (Race)_worldPacket.ReadUInt8();
             CreateInfo.ClassId = (Class)_worldPacket.ReadUInt8();
             CreateInfo.Sex = (Gender)_worldPacket.ReadUInt8();
@@ -318,11 +322,11 @@ namespace Game.Network.Packets
             CreateInfo.OutfitId = _worldPacket.ReadUInt8();
 
             for (var i = 0; i < CreateInfo.CustomDisplay.GetLimit(); ++i)
-                CreateInfo.CustomDisplay.Add(_worldPacket.ReadUInt8());
+                CreateInfo.CustomDisplay[i] = _worldPacket.ReadUInt8();
 
             CreateInfo.Name = _worldPacket.ReadString(nameLength);
             if (CreateInfo.TemplateSet.HasValue)
-                CreateInfo.TemplateSet.Value = _worldPacket.ReadUInt32();
+                CreateInfo.TemplateSet.Set(_worldPacket.ReadUInt32());
         }
 
         public CharacterCreateInfo CreateInfo;
@@ -335,9 +339,11 @@ namespace Game.Network.Packets
         public override void Write()
         {
             _worldPacket.WriteUInt8(Code);
+            _worldPacket.WritePackedGuid(Guid);
         }
 
         public ResponseCodes Code;
+        public ObjectGuid Guid;
     }
 
     public class CharDelete : ClientPacket
@@ -419,7 +425,7 @@ namespace Game.Network.Packets
             CustomizeInfo.FaceID = _worldPacket.ReadUInt8();
 
             for (var i = 0; i < CustomizeInfo.CustomDisplay.GetLimit(); ++i)
-                CustomizeInfo.CustomDisplay.Add(_worldPacket.ReadUInt8());
+                CustomizeInfo.CustomDisplay[i] = _worldPacket.ReadUInt8();
 
             CustomizeInfo.CharName = _worldPacket.ReadString(_worldPacket.ReadBits<uint>(6));
         }
@@ -452,7 +458,7 @@ namespace Game.Network.Packets
             RaceOrFactionChangeInfo.FaceID = _worldPacket.ReadUInt8();
 
             for (var i = 0; i < RaceOrFactionChangeInfo.CustomDisplay.GetLimit(); ++i)
-                RaceOrFactionChangeInfo.CustomDisplay.Add(_worldPacket.ReadUInt8());
+                RaceOrFactionChangeInfo.CustomDisplay[i] = _worldPacket.ReadUInt8();
 
             RaceOrFactionChangeInfo.Name = _worldPacket.ReadString(nameLength);
         }
@@ -805,7 +811,7 @@ namespace Game.Network.Packets
             NewFace = _worldPacket.ReadUInt32();
 
             for (var i = 0; i < NewCustomDisplay.GetLimit(); ++i)
-                NewCustomDisplay.Add(_worldPacket.ReadUInt32());
+                NewCustomDisplay[i] = _worldPacket.ReadUInt32();
         }
 
         public uint NewHairStyle;
@@ -1043,6 +1049,7 @@ namespace Game.Network.Packets
         public Array<byte> CustomDisplay = new Array<byte>(PlayerConst.CustomDisplaySize);
         public byte OutfitId;
         public Optional<uint> TemplateSet = new Optional<uint>();
+        public bool IsTrialBoost;
         public string Name;
 
         // Server side data

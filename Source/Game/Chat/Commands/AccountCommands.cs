@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -757,7 +757,7 @@ namespace Game.Chat
                         if (!result.IsEmpty())
                         {
                             string country = result.Read<string>(0);
-                            stmt = DB.Login.GetPreparedStatement(LoginStatements.UPD_ACCOUNT_LOCK_CONTRY);
+                            stmt = DB.Login.GetPreparedStatement(LoginStatements.UPD_ACCOUNT_LOCK_COUNTRY);
                             stmt.AddValue(0, country);
                             stmt.AddValue(1, handler.GetSession().GetAccountId());
                             DB.Login.Execute(stmt);
@@ -771,7 +771,7 @@ namespace Game.Chat
                     }
                     else if (param == "off")
                     {
-                        PreparedStatement stmt = DB.Login.GetPreparedStatement(LoginStatements.UPD_ACCOUNT_LOCK_CONTRY);
+                        PreparedStatement stmt = DB.Login.GetPreparedStatement(LoginStatements.UPD_ACCOUNT_LOCK_COUNTRY);
                         stmt.AddValue(0, "00");
                         stmt.AddValue(1, handler.GetSession().GetAccountId());
                         DB.Login.Execute(stmt);

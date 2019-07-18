@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,7 +88,7 @@ namespace Game.Collision
             return mdl;
         }
 
-        public override bool IntersectRay(Ray ray, ref float maxDist, bool stopAtFirstHit, PhaseShift phaseShift)
+        public override bool IntersectRay(Ray ray, ref float maxDist, bool stopAtFirstHit, PhaseShift phaseShift, ModelIgnoreFlags ignoreFlags)
         {
             if (!isCollisionEnabled() || !owner.IsSpawned())
                 return false;
@@ -104,7 +104,7 @@ namespace Game.Collision
             Vector3 p = iInvRot * (ray.Origin - iPos) * iInvScale;
             Ray modRay = new Ray(p, iInvRot * ray.Direction);
             float distance = maxDist * iInvScale;
-            bool hit = iModel.IntersectRay(modRay, ref distance, stopAtFirstHit);
+            bool hit = iModel.IntersectRay(modRay, ref distance, stopAtFirstHit, ignoreFlags);
             if (hit)
             {
                 distance *= iScale;

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,5 +43,13 @@ namespace Game.DataStorage
         public uint Id;
         public string Name;
         public byte LocaleMask;
+    }
+
+    public sealed class NumTalentsAtLevelRecord
+    {
+        public uint Id;
+        public uint NumTalents;
+        public uint NumTalentsDeathKnight;
+        public uint NumTalentsDemonHunter;
     }
 }

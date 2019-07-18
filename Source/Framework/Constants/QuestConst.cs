@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -313,6 +313,11 @@ namespace Framework.Constants
         SuppressFarewellAudioAfterQuestAccept = 0x0400000,
         RewardsBypassWeeklyCapsAndSeasonTotal = 0x0800000,
         ClearProgressOfCriteriaTreeObjectivesOnAccept = 0x1000000
+    }
+
+    public enum QuestFlagsEx2
+    {
+        NoWarModeBonus = 0x2
     }
 
     public enum QuestSpecialFlags

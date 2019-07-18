@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -223,7 +223,7 @@ namespace Game.Entities
             if (GetFlags().HasAnyFlag(ItemFlags.IsBoundToAccount) && alwaysAllowBoundToAccount)
                 return true;
 
-            uint spec = player.GetUInt32Value(PlayerFields.LootSpecId);
+            uint spec = player.GetUInt32Value(ActivePlayerFields.LootSpecId);
             if (spec == 0)
                 spec = player.GetUInt32Value(PlayerFields.CurrentSpecId);
             if (spec == 0)
@@ -276,11 +276,6 @@ namespace Game.Entities
         {
             Cypher.Assert(index < ItemConst.MaxStats);
             return ExtendedData.StatModifierBonusStat[index];
-        }
-        public int GetItemStatValue(uint index)
-        {
-            Cypher.Assert(index < ItemConst.MaxStats);
-            return ExtendedData.ItemStatValue[index];
         }
         public int GetItemStatAllocation(uint index)
         {

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -228,6 +228,9 @@ namespace BNetServer.Networking
 
         public BattlenetRpcErrorCode HandleVerifyWebCredentials(Bgs.Protocol.Authentication.V1.VerifyWebCredentialsRequest verifyWebCredentialsRequest)
         {
+            if (verifyWebCredentialsRequest.WebCredentials.IsEmpty)
+                return BattlenetRpcErrorCode.Denied;
+
             PreparedStatement stmt = DB.Login.GetPreparedStatement(LoginStatements.SEL_BNET_ACCOUNT_INFO);
             stmt.AddValue(0, verifyWebCredentialsRequest.WebCredentials.ToStringUtf8());
 
@@ -466,7 +469,9 @@ namespace BNetServer.Networking
             {
                 var realmListTicketClientInformation = Json.CreateObject<RealmListTicketClientInformation>(clientInfo.BlobValue.ToStringUtf8(), true);
                 clientInfoOk = true;
-                _clientSecret.AddRange(realmListTicketClientInformation.Info.Secret.Select(Convert.ToByte).ToArray());
+                int i = 0;
+                foreach (var b in realmListTicketClientInformation.Info.Secret.Select(Convert.ToByte))
+                    _clientSecret[i++] = b;
             }
 
             if (!clientInfoOk)

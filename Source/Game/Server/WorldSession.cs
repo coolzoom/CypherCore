@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -164,9 +164,9 @@ namespace Game
                     for (int j = InventorySlots.BuyBackStart; j < InventorySlots.BuyBackEnd; ++j)
                     {
                         int eslot = j - InventorySlots.BuyBackStart;
-                        _player.SetGuidValue(PlayerFields.InvSlotHead + (j * 4), ObjectGuid.Empty);
-                        _player.SetUInt32Value(PlayerFields.BuyBackPrice1 + eslot, 0);
-                        _player.SetUInt32Value(PlayerFields.BuyBackTimestamp1 + eslot, 0);
+                        _player.SetGuidValue(ActivePlayerFields.InvSlotHead + (j * 4), ObjectGuid.Empty);
+                        _player.SetUInt32Value(ActivePlayerFields.BuyBackPrice + eslot, 0);
+                        _player.SetUInt32Value(ActivePlayerFields.BuyBackTimestamp + eslot, 0);
                     }
                     _player.SaveToDB();
                 }

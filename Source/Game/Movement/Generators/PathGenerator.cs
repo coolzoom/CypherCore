@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -634,9 +634,10 @@ namespace Game.Movement
             uint ns = 0;
             while (ns < nsteerPath)
             {
+                Span<float> span = steerPath;
                 // Stop at Off-Mesh link or when point is further than slop away.
                 if ((steerPathFlags[ns].HasAnyFlag((byte)Detour.dtStraightPathFlags.DT_STRAIGHTPATH_OFFMESH_CONNECTION) ||
-                    !InRangeYZX(steerPath.Skip((int)ns * 3).ToArray(), startPos, minTargetDist, 1000.0f)))
+                    !InRangeYZX(span.Slice((int)ns * 3).ToArray(), startPos, minTargetDist, 1000.0f)))
                     break;
                 ns++;
             }

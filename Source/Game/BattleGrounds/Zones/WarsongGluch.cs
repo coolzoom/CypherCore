@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1019,7 +1019,7 @@ namespace Game.BattleGrounds.Zones
         public const int Berserkbuff2 = 17;
         public const int Max = 18;
     }
-    struct WSGObjectEntry
+    public sealed class WSGObjectEntry
     {
         public const uint DoorA1 = 179918;
         public const uint DoorA2 = 179919;

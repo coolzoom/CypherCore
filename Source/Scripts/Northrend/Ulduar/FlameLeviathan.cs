@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -559,7 +559,7 @@ namespace Scripts.Northrend.Ulduar.FlameLeviathan
             vehicle = creature.GetVehicleKit();
             Cypher.Assert(vehicle);
             me.SetReactState(ReactStates.Passive);
-            me.SetDisplayId(me.GetCreatureTemplate().ModelId2);
+            me.SetDisplayFromModel(1);
             instance = creature.GetInstanceScript();
         }
 

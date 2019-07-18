@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ namespace Game.Network.Packets
         {
             var count = _worldPacket.ReadUInt32();
             for (var i = 0; i < count; ++i)
-                MissingScenarioPOIs.Add(_worldPacket.ReadInt32());
+                MissingScenarioPOIs[i] = _worldPacket.ReadInt32();
         }
 
         public Array<int> MissingScenarioPOIs = new Array<int>(35);
@@ -142,8 +142,7 @@ namespace Game.Network.Packets
                 {
                     _worldPacket.WriteInt32(scenarioPOI.BlobIndex);
                     _worldPacket.WriteInt32(scenarioPOI.MapID);
-                    _worldPacket.WriteInt32(scenarioPOI.WorldMapAreaID);
-                    _worldPacket.WriteInt32(scenarioPOI.Floor);
+                    _worldPacket.WriteInt32(scenarioPOI.UiMapID);
                     _worldPacket.WriteInt32(scenarioPOI.Priority);
                     _worldPacket.WriteInt32(scenarioPOI.Flags);
                     _worldPacket.WriteInt32(scenarioPOI.WorldEffectID);

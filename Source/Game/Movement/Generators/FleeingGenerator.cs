@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ namespace Game.Movement
             _getPoint(owner, out x, out y, out z);
 
             Position mypos = owner.GetPosition();
-            bool isInLOS = Global.VMapMgr.isInLineOfSight(PhasingHandler.GetTerrainMapId(owner.GetPhaseShift(), owner.GetMap(), mypos.posX, mypos.posY), mypos.posX, mypos.posY, mypos.posZ + 2.0f, x, y, z + 2.0f);
+            bool isInLOS = Global.VMapMgr.isInLineOfSight(PhasingHandler.GetTerrainMapId(owner.GetPhaseShift(), owner.GetMap(), mypos.posX, mypos.posY), mypos.posX, mypos.posY, mypos.posZ + 2.0f, x, y, z + 2.0f, ModelIgnoreFlags.Nothing);
 
             if (!isInLOS)
             {

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -202,7 +202,7 @@ namespace Game.Entities
                 {
                     SetCritterGUID(minion.GetGUID());
                     if (GetTypeId() == TypeId.Player)
-                        minion.SetGuidValue(UnitFields.BattlePetCompanionGuid, GetGuidValue(PlayerFields.SummonedBattlePetId));
+                        minion.SetGuidValue(UnitFields.BattlePetCompanionGuid, GetGuidValue(ActivePlayerFields.SummonedBattlePetId));
                 }
 
                 // PvP, FFAPvP

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -582,13 +582,11 @@ namespace Game
             if (!GetPlayer().IsInWorld)
                 return;
 
+            // pet/charmed
             Creature pet = ObjectAccessor.GetCreatureOrPetOrVehicle(GetPlayer(), packet.Pet);
-            if (pet)
+            if (pet && pet.ToPet() && pet.ToPet().getPetType() == PetType.Hunter)
             {
-                if (pet.IsPet())
-                    GetPlayer().RemovePet(pet.ToPet(), PetSaveMode.AsDeleted);
-                else if (pet.GetGUID() == GetPlayer().GetCharmGUID())
-                    GetPlayer().StopCastingCharm();
+                _player.RemovePet((Pet)pet, PetSaveMode.AsDeleted);
             }
         }
 

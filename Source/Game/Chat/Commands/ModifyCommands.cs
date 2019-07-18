@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -215,7 +215,11 @@ namespace Game.Chat
             if (CheckModifySpeed(args, handler, target, out Scale, 0.1f, 10.0f, false))
             {
                 NotifyModification(handler, target, CypherStrings.YouChangeSize, CypherStrings.YoursSizeChanged, Scale);
-                target.SetObjectScale(Scale);
+                Creature creatureTarget = target.ToCreature();
+                if (creatureTarget)
+                    creatureTarget.SetFloatValue(UnitFields.DisplayScale, Scale);
+                else
+                    target.SetObjectScale(Scale);
                 return true;
             }
             return false;

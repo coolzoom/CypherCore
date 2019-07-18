@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -181,5 +181,11 @@ namespace Framework.Constants
         CannotEnterMaxPlayers, // Target Map Already Has The Maximum Number Of Players Allowed
         CannotEnterZoneInCombat, // A Boss Encounter Is Currently In Progress On The Target Map
         CannotEnterUnspecifiedReason
+    }
+
+    public enum ModelIgnoreFlags
+    {
+        Nothing = 0x00,
+        M2 = 0x01
     }
 }

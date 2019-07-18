@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@ namespace Game.Entities
             objectTypeMask |= TypeMask.GameObject;
             objectTypeId = TypeId.GameObject;
 
-            m_updateFlag = UpdateFlag.StationaryPosition | UpdateFlag.Rotation;
+            m_updateFlag.Stationary = true;
+            m_updateFlag.Rotation = true;
 
             valuesCount = (int)GameObjectFields.End;
             m_respawnDelayTime = 300;
@@ -219,7 +220,7 @@ namespace Game.Entities
             else
             {
                 guid = ObjectGuid.Create(HighGuid.Transport, map.GenerateLowGuid(HighGuid.Transport));
-                m_updateFlag |= UpdateFlag.Transport;
+                m_updateFlag.ServerTime = true;
             }
 
             _Create(guid);
@@ -252,7 +253,7 @@ namespace Game.Entities
 
                 if (m_goTemplateAddon.WorldEffectID != 0)
                 {
-                    m_updateFlag |= UpdateFlag.Gameobject;
+                    m_updateFlag.GameObject = true;
                     SetWorldEffectID(m_goTemplateAddon.WorldEffectID);
                 }
             }
@@ -273,6 +274,8 @@ namespace Game.Entities
             m_prevGoState = goState;
             SetGoState(goState);
             SetGoArtKit((byte)artKit);
+
+            SetUInt32Value(GameObjectFields.StateAnimId, (uint)CliDB.AnimationDataStorage.Count);
 
             switch (goInfo.type)
             {
@@ -356,7 +359,7 @@ namespace Game.Entities
 
             if (gameObjectAddon != null && gameObjectAddon.WorldEffectID != 0)
             {
-                m_updateFlag |= UpdateFlag.Gameobject;
+                m_updateFlag.GameObject = true;
                 SetWorldEffectID(gameObjectAddon.WorldEffectID);
             }
 
@@ -378,6 +381,18 @@ namespace Game.Entities
                         linkedGo.Dispose();
                 }
             }
+
+            // Check if GameObject is Infinite
+            if (goInfo.IsInfiniteGameObject())
+                SetVisibilityDistanceOverride(VisibilityDistanceType.Infinite);
+
+            // Check if GameObject is Gigantic
+            if (goInfo.IsGiganticGameObject())
+                SetVisibilityDistanceOverride(VisibilityDistanceType.Gigantic);
+
+            // Check if GameObject is Large
+            if (goInfo.IsLargeGameObject())
+                SetVisibilityDistanceOverride(VisibilityDistanceType.Large);
 
             return true;
         }
@@ -1862,7 +1877,7 @@ namespace Game.Entities
                             return;
 
                         Player player = user.ToPlayer();
-                        PlayerConditionRecord playerCondition = CliDB.PlayerConditionStorage.LookupByKey(info.artifactForge.conditionID1);
+                        PlayerConditionRecord playerCondition = CliDB.PlayerConditionStorage.LookupByKey(info.ArtifactForge.conditionID1);
                         if (playerCondition != null)
                             if (!ConditionManager.IsPlayerMeetingCondition(player, playerCondition))
                                 return;

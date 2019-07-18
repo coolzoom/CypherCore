@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1406,12 +1406,12 @@ namespace Game.Guilds
             }
         }
 
-        public void BroadcastAddonToGuild(WorldSession session, bool officerOnly, string msg, string prefix)
+        public void BroadcastAddonToGuild(WorldSession session, bool officerOnly, string msg, string prefix, bool isLogged)
         {
             if (session != null && session.GetPlayer() != null && _HasRankRight(session.GetPlayer(), officerOnly ? GuildRankRights.OffChatSpeak : GuildRankRights.GChatSpeak))
             {
                 ChatPkt data = new ChatPkt();
-                data.Initialize(officerOnly ? ChatMsg.Officer : ChatMsg.Guild, Language.Addon, session.GetPlayer(), null, msg, 0, "", LocaleConstant.enUS, prefix);
+                data.Initialize(officerOnly ? ChatMsg.Officer : ChatMsg.Guild, isLogged ? Language.AddonLogged : Language.Addon, session.GetPlayer(), null, msg, 0, "", LocaleConstant.enUS, prefix);
                 foreach (var member in m_members.Values)
                 {
                     Player player = member.FindPlayer();
@@ -2786,7 +2786,7 @@ namespace Game.Guilds
                 ObjectGuid playerGUID = ObjectGuid.Create(HighGuid.Player, m_playerGuid1);
                 ObjectGuid otherGUID = ObjectGuid.Create(HighGuid.Player, m_playerGuid2);
 
-                GuildEventEntry eventEntry;
+                GuildEventEntry eventEntry = new GuildEventEntry();
                 eventEntry.PlayerGUID = playerGUID;
                 eventEntry.OtherGUID = otherGUID;
                 eventEntry.TransactionType = (byte)m_eventType;

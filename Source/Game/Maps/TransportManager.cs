@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -203,7 +203,8 @@ namespace Game.Maps
                 {
                     int extra = !keyFrames[i - 1].Teleport ? 1 : 0;
                     Spline spline = new Spline();
-                    spline.Init_Spline(splinePath.Skip(start).ToArray(), i - start + extra, Spline.EvaluationMode.Catmullrom);
+                    Span<Vector3> span = splinePath.ToArray();
+                    spline.Init_Spline(span.Slice(start), i - start + extra, Spline.EvaluationMode.Catmullrom);
                     spline.initLengths();
                     for (int j = start; j < i + extra; ++j)
                     {

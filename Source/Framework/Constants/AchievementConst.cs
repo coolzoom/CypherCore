@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -408,7 +408,10 @@ namespace Framework.Constants
         GainParagonReputation = 206,
         EarnHonorXp = 207,
         RelicTalentUnlocked = 211,
-        TotalTypes = 213
+        ReachAccountHonorLevel = 213,
+        HeartOfAzerothArtifactPowerEarned = 214,
+        HeartOfAzerothLevelReached = 215,
+        TotalTypes
     }
 
     public enum CriteriaDataType

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -120,7 +120,7 @@ namespace Game.Entities
     {
         public void Write(WorldPacket data)
         {
-            data.WriteBit(TargetGUID.HasValue);
+            data.WriteBit(PathTarget.HasValue);
             data.WriteBit(Center.HasValue);
             data.WriteBit(CounterClockwise);
             data.WriteBit(CanLoop);
@@ -133,14 +133,14 @@ namespace Game.Entities
             data.WriteFloat(InitialAngle);
             data.WriteFloat(ZOffset);
 
-            if (TargetGUID.HasValue)
-                data.WritePackedGuid(TargetGUID.Value);
+            if (PathTarget.HasValue)
+                data.WritePackedGuid(PathTarget.Value);
 
             if (Center.HasValue)
                 data.WriteVector3(Center.Value);
         }
 
-        public Optional<ObjectGuid> TargetGUID;
+        public Optional<ObjectGuid> PathTarget;
         public Optional<Vector3> Center;
         public bool CounterClockwise;
         public bool CanLoop;
@@ -227,6 +227,9 @@ namespace Game.Entities
         public uint ScaleCurveId;
         public uint MorphCurveId;
         public uint FacingCurveId;
+
+        public uint AnimId;
+        public uint AnimKitId;
 
         public uint DecalPropertiesId;
 

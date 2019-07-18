@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 using Framework.GameMath;
 using System;
 using System.Collections.Generic;
+using Framework.Constants;
 
 namespace Game.Collision
 {
@@ -27,7 +28,6 @@ namespace Game.Collision
         public virtual void Invoke(Vector3 point, IModel entry) { }
         public virtual bool Invoke(Ray ray, uint entry, ref float distance, bool pStopAtFirstHit) { return false; }
         public virtual bool Invoke(Ray r, IModel obj, ref float distance) { return false; }
-        public virtual bool Invoke(Ray ray, uint idx, ref float maxDist) { return false; }
     }
 
     public class TriBoundFunc
@@ -168,16 +168,17 @@ namespace Game.Collision
 
     public class MapRayCallback : WorkerCallback
     {
-        public MapRayCallback(ModelInstance[] val)
+        public MapRayCallback(ModelInstance[] val, ModelIgnoreFlags ignoreFlags)
         {
             prims = val;
             hit = false;
+            flags = ignoreFlags;
         }
         public override bool Invoke(Ray ray, uint entry, ref float distance, bool pStopAtFirstHit = true)
         {
             if (prims[entry] == null)
                 return false;
-            bool result = prims[entry].intersectRay(ray, ref distance, pStopAtFirstHit);
+            bool result = prims[entry].intersectRay(ray, ref distance, pStopAtFirstHit, flags);
             if (result)
                 hit = true;
             return result;
@@ -186,6 +187,7 @@ namespace Game.Collision
 
         ModelInstance[] prims;
         bool hit;
+        ModelIgnoreFlags flags;
     }
 
     public class AreaInfoCallback : WorkerCallback
@@ -236,7 +238,7 @@ namespace Game.Collision
 
         public override bool Invoke(Ray r, IModel obj, ref float distance)
         {
-            _didHit = obj.IntersectRay(r, ref distance, true, _phaseShift);
+            _didHit = obj.IntersectRay(r, ref distance, true, _phaseShift, ModelIgnoreFlags.Nothing);
             return _didHit;
         }
 

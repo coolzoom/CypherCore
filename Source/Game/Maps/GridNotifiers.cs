@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -663,7 +663,7 @@ namespace Game.Maps
                     //Caster may be NULL if DynObj is in removelist
                     Player caster = Global.ObjAccessor.FindPlayer(guid);
                     if (caster != null)
-                        if (caster.GetGuidValue(PlayerFields.Farsight) == obj.GetGUID())
+                        if (caster.GetGuidValue(ActivePlayerFields.Farsight) == obj.GetGUID())
                             BuildPacket(caster);
                 }
             }
@@ -771,7 +771,7 @@ namespace Game.Maps
         }
 
         MessageBuilder Builder;
-        ServerPacket[] i_data_cache = new ServerPacket[(int)LocaleConstant.Max];     // 0 = default, i => i-1 locale index
+        ServerPacket[] i_data_cache = new ServerPacket[(int)LocaleConstant.Total];     // 0 = default, i => i-1 locale index
     }
 
     public class LocalizedPacketListDo : IDoWork<Player>

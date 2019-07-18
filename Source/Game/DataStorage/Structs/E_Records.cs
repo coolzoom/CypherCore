@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,30 +21,60 @@ namespace Game.DataStorage
     {
         public uint Id;
         public long RaceMask;
-        public uint EmoteSlashCommand;
+        public string EmoteSlashCommand;
+        public int AnimId;
         public uint EmoteFlags;
-        public uint SpellVisualKitID;
-        public ushort AnimID;
         public byte EmoteSpecProc;
+        public uint EmoteSpecProcParam;
+        public uint EventSoundID;
+        public uint SpellVisualKitId;
         public int ClassMask;
-        public byte EmoteSpecProcParam;
-        public ushort EmoteSoundID;
     }
 
     public sealed class EmotesTextRecord
     {
         public uint Id;
         public string Name;
-        public ushort EmoteID;
+        public ushort EmoteId;
     }
 
     public sealed class EmotesTextSoundRecord
     {
         public uint Id;
         public byte RaceId;
-        public byte SexId;
         public byte ClassId;
+        public byte SexId;
         public uint SoundId;
         public uint EmotesTextId;
+    }
+
+    public sealed class ExpectedStatRecord
+    {
+        public uint Id;
+        public int ExpansionID;
+        public float CreatureHealth;
+        public float PlayerHealth;
+        public float CreatureAutoAttackDps;
+        public float CreatureArmor;
+        public float PlayerMana;
+        public float PlayerPrimaryStat;
+        public float PlayerSecondaryStat;
+        public float ArmorConstant;
+        public float CreatureSpellDamage;
+        public uint Lvl;
+    }
+
+    public sealed class ExpectedStatModRecord
+    {
+        public uint Id;
+        public float CreatureHealthMod;
+        public float PlayerHealthMod;
+        public float CreatureAutoAttackDPSMod;
+        public float CreatureArmorMod;
+        public float PlayerManaMod;
+        public float PlayerPrimaryStatMod;
+        public float PlayerSecondaryStatMod;
+        public float ArmorConstantMod;
+        public float CreatureSpellDamageMod;
     }
 }

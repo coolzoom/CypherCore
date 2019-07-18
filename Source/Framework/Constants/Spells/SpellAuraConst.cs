@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -513,7 +513,9 @@ namespace Framework.Constants
         Unk489 = 489,
         Unk490 = 490,
         Unk491 = 491,
-        Total = 492
+        Unk492 = 492,
+        Unk493 = 493,
+        Total
     }
 
     public enum AuraEffectHandleModes

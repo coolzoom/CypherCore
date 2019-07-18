@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,10 +34,10 @@ namespace Game.DataStorage
     public sealed class QuestPackageItemRecord
     {
         public uint Id;
-        public uint ItemID;
         public ushort PackageID;
-        public QuestPackageFilter DisplayType;
+        public uint ItemID;
         public byte ItemQuantity;
+        public QuestPackageFilter DisplayType;
     }
 
     public sealed class QuestSortRecord

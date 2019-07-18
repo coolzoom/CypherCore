@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -406,7 +406,7 @@ namespace Game.BattlePets
                 return;
 
             // TODO: set proper CreatureID for spell DEFAULT_SUMMON_BATTLE_PET_SPELL (default EffectMiscValueA is 40721 - Murkimus the Gladiator)
-            _owner.GetPlayer().SetGuidValue(PlayerFields.SummonedBattlePetId, guid);
+            _owner.GetPlayer().SetGuidValue(ActivePlayerFields.SummonedBattlePetId, guid);
             _owner.GetPlayer().CastSpell(_owner.GetPlayer(), speciesEntry.SummonSpellID != 0 ? speciesEntry.SummonSpellID : SharedConst.DefaultSummonBattlePetSpell);
 
             // TODO: set pet level, quality... update fields
@@ -416,10 +416,10 @@ namespace Game.BattlePets
         {
             Player ownerPlayer = _owner.GetPlayer();
             Creature pet = ObjectAccessor.GetCreatureOrPetOrVehicle(ownerPlayer, ownerPlayer.GetCritterGUID());
-            if (pet && ownerPlayer.GetGuidValue(PlayerFields.SummonedBattlePetId) == pet.GetGuidValue(UnitFields.BattlePetCompanionGuid))
+            if (pet && ownerPlayer.GetGuidValue(ActivePlayerFields.SummonedBattlePetId) == pet.GetGuidValue(UnitFields.BattlePetCompanionGuid))
             {
                 pet.DespawnOrUnsummon();
-                ownerPlayer.SetGuidValue(PlayerFields.SummonedBattlePetId, ObjectGuid.Empty);
+                ownerPlayer.SetGuidValue(ActivePlayerFields.SummonedBattlePetId, ObjectGuid.Empty);
             }
         }
 

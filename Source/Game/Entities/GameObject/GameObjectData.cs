@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -180,7 +180,7 @@ namespace Game.Entities
         public garrisonmonumentplaque GarrisonMonumentPlaque;
 
         [FieldOffset(68)]
-        public artifactforge artifactForge;
+        public artifactforge ArtifactForge;
 
         [FieldOffset(68)]
         public uilink UILink;
@@ -193,6 +193,18 @@ namespace Game.Entities
 
         [FieldOffset(68)]
         public challengemodereward ChallengeModeReward;
+
+        [FieldOffset(68)]
+        public multi Multi;
+
+        [FieldOffset(68)]
+        public siegeableMulti SiegeableMulti;
+
+        [FieldOffset(68)]
+        public siegeableMO SiegeableMO;
+
+        [FieldOffset(68)]
+        public pvpReward PvpReward;
 
         [FieldOffset(68)]
         public raw Raw;
@@ -264,6 +276,10 @@ namespace Game.Entities
                     return CapturePoint.open;
                 case GameObjectTypes.GatheringNode:
                     return GatheringNode.open;
+                case GameObjectTypes.ChallengeModeReward:
+                    return ChallengeModeReward.open;
+                case GameObjectTypes.PvpReward:
+                    return PvpReward.open;
                 default:
                     return 0;
             }
@@ -415,6 +431,90 @@ namespace Game.Entities
             }
         }
 
+        public bool IsInfiniteGameObject()
+        {
+            switch (type)
+            {
+                case GameObjectTypes.Door:
+                    return Door.InfiniteAOI != 0;
+                case GameObjectTypes.FlagStand:
+                    return FlagStand.InfiniteAOI != 0;
+                case GameObjectTypes.FlagDrop:
+                    return FlagDrop.InfiniteAOI != 0;
+                case GameObjectTypes.TrapDoor:
+                    return TrapDoor.InfiniteAOI != 0;
+                case GameObjectTypes.NewFlag:
+                    return NewFlag.InfiniteAOI != 0;
+                default: return false;
+            }
+        }
+
+        public bool IsGiganticGameObject()
+        {
+            switch (type)
+            {
+                case GameObjectTypes.Door:
+                    return Door.GiganticAOI != 0;
+                case GameObjectTypes.Button:
+                    return Button.GiganticAOI != 0;
+                case GameObjectTypes.QuestGiver:
+                    return QuestGiver.GiganticAOI != 0;
+                case GameObjectTypes.Chest:
+                    return Chest.GiganticAOI != 0;
+                case GameObjectTypes.Generic:
+                    return Generic.GiganticAOI != 0;
+                case GameObjectTypes.Trap:
+                    return Trap.GiganticAOI != 0;
+                case GameObjectTypes.SpellFocus:
+                    return SpellFocus.GiganticAOI != 0;
+                case GameObjectTypes.Goober:
+                    return Goober.GiganticAOI != 0;
+                case GameObjectTypes.SpellCaster:
+                    return SpellCaster.GiganticAOI != 0;
+                case GameObjectTypes.FlagStand:
+                    return FlagStand.GiganticAOI != 0;
+                case GameObjectTypes.FlagDrop:
+                    return FlagDrop.GiganticAOI != 0;
+                case GameObjectTypes.ControlZone:
+                    return ControlZone.GiganticAOI != 0;
+                case GameObjectTypes.DungeonDifficulty:
+                    return DungeonDifficulty.GiganticAOI != 0;
+                case GameObjectTypes.TrapDoor:
+                    return TrapDoor.GiganticAOI != 0;
+                case GameObjectTypes.NewFlag:
+                    return NewFlag.GiganticAOI != 0;
+                case GameObjectTypes.CapturePoint:
+                    return CapturePoint.GiganticAOI != 0;
+                case GameObjectTypes.GarrisonShipment:
+                    return GarrisonShipment.GiganticAOI != 0;
+                case GameObjectTypes.UILink:
+                    return UILink.GiganticAOI != 0;
+                case GameObjectTypes.GatheringNode:
+                    return GatheringNode.GiganticAOI != 0;
+                default: return false;
+            }
+        }
+
+        public bool IsLargeGameObject()
+        {
+            switch (type)
+            {
+                case GameObjectTypes.Chest:
+                    return Chest.LargeAOI != 0;
+                case GameObjectTypes.Generic:
+                    return Generic.LargeAOI != 0;
+                case GameObjectTypes.DungeonDifficulty:
+                    return DungeonDifficulty.LargeAOI != 0;
+                case GameObjectTypes.GarrisonShipment:
+                    return GarrisonShipment.LargeAOI != 0;
+                case GameObjectTypes.ArtifactForge:
+                    return ArtifactForge.LargeAOI != 0;
+                case GameObjectTypes.GatheringNode:
+                    return GatheringNode.LargeAOI != 0;
+                default: return false;
+            }
+        }
+
         #region TypeStructs
         public unsafe struct raw
         {
@@ -490,7 +590,7 @@ namespace Game.Entities
             public uint usegrouplootrules;                       // 15 use group loot rules, enum { false, true, }; Default: false
             public uint floatingTooltip;                         // 16 floatingTooltip, enum { false, true, }; Default: false
             public uint conditionID1;                            // 17 conditionID1, References: PlayerCondition, NoValue = 0
-            public int xpLevel;                                  // 18 xpLevel, int, Min value: -1, Max value: 123, Default value: 0
+            public uint xpLevel;                                 // 18 XP Level Range, References: ContentTuning, NoValue = 0
             public uint xpDifficulty;                            // 19 xpDifficulty, enum { No Exp, Trivial, Very Small, Small, Substandard, Standard, High, Epic, Dungeon, 5, }; Default: No Exp
             public uint lootLevel;                               // 20 lootLevel, int, Min value: 0, Max value: 123, Default value: 0
             public uint GroupXP;                                 // 21 Group XP, enum { false, true, }; Default: false
@@ -505,6 +605,7 @@ namespace Game.Entities
             public uint chestPersonalLoot;                       // 30 chest Personal Loot, References: Treasure, NoValue = 0
             public uint turnpersonallootsecurityoff;             // 31 turn personal loot security off, enum { false, true, }; Default: false
             public uint ChestProperties;                         // 32 Chest Properties, References: ChestProperties, NoValue = 0
+            public uint chestPushLoot;                           // 33 chest Push Loot, References: Treasure, NoValue = 0
         }
 
 
@@ -710,6 +811,7 @@ namespace Game.Entities
         {
             public uint creatureID;                              // 0 creatureID, References: Creature, NoValue = 0
             public uint charges;                                 // 1 charges, int, Min value: 0, Max value: 65535, Default value: 1
+            public uint Preferonlyifinlineofsight;               // 2 Prefer only if in line of sight (expensive), enum { false, true, }; Default: false
         }
 
 
@@ -885,7 +987,10 @@ namespace Game.Entities
             public uint startOpen;                               // 1 startOpen, enum { false, true, }; Default: false
             public uint autoClose;                               // 2 autoClose (ms), int, Min value: 0, Max value: 2147483647, Default value: 0
             public uint BlocksPathsDown;                         // 3 Blocks Paths Down, enum { false, true, }; Default: false
-            public uint PathBlockerBump;                         // 4 Path Blocker Bump (ft), int, Min value: -2147483648, Max value: 2147483647, Default value: 0
+            public int PathBlockerBump;                          // 4 Path Blocker Bump (ft), int, Min value: -2147483648, Max value: 2147483647, Default value: 0
+            public uint GiganticAOI;                             // 5 Gigantic AOI, enum { false, true, }; Default: false
+            public uint InfiniteAOI;                             // 6 Infinite AOI, enum { false, true, }; Default: false
+            public uint DoorisOpaque;                            // 7 Door is Opaque (Disable portal on close), enum { false, true, }; Default: false
         }
 
 
@@ -971,7 +1076,7 @@ namespace Game.Entities
         public struct phaseablemo
         {
             public int SpawnMap;                                 // 0 Spawn Map, References: Map, NoValue = -1
-            public uint AreaNameSet;                             // 1 Area Name Set (Index), int, Min value: -2147483648, Max value: 2147483647, Default value: 0
+            public int AreaNameSet;                              // 1 Area Name Set (Index), int, Min value: -2147483648, Max value: 2147483647, Default value: 0
             public uint DoodadSetA;                              // 2 Doodad Set A, int, Min value: 0, Max value: 2147483647, Default value: 0
             public uint DoodadSetB;                              // 3 Doodad Set B, int, Min value: 0, Max value: 2147483647, Default value: 0
         }
@@ -1009,7 +1114,7 @@ namespace Game.Entities
 
         public struct uilink
         {
-            public uint UILinkType;                              // 0 UI Link Type, enum { Adventure Journal, Obliterum Forge, }; Default: Adventure Journal
+            public uint UILinkType;                              // 0 UI Link Type, enum { Adventure Journal, Obliterum Forge, Scrapping Machine}; Default: Adventure Journal
             public uint allowMounted;                            // 1 allowMounted, enum { false, true, }; Default: false
             public uint GiganticAOI;                             // 2 Gigantic AOI, enum { false, true, }; Default: false
             public uint spellFocusType;                          // 3 spellFocusType, References: SpellFocusObject, NoValue = 0
@@ -1032,7 +1137,7 @@ namespace Game.Entities
             public uint openTextID;                              // 9 openTextID, References: BroadcastText, NoValue = 0
             public uint floatingTooltip;                         // 10 floatingTooltip, enum { false, true, }; Default: false
             public uint conditionID1;                            // 11 conditionID1, References: PlayerCondition, NoValue = 0
-            public uint xpLevel;                                 // 12 xpLevel, int, Min value: -1, Max value: 123, Default value: 0
+            public uint XPLevelRange;                            // 12 XP Level Range, References: ContentTuning, NoValue = 0
             public uint xpDifficulty;                            // 13 xpDifficulty, enum { No Exp, Trivial, Very Small, Small, Substandard, Standard, High, Epic, Dungeon, 5, }; Default: No Exp
             public uint spell;                                   // 14 spell, References: Spell, NoValue = 0
             public uint GiganticAOI;                             // 15 Gigantic AOI, enum { false, true, }; Default: false
@@ -1041,12 +1146,44 @@ namespace Game.Entities
             public uint MaxNumberofLoots;                        // 18 Max Number of Loots, int, Min value: 1, Max value: 40, Default value: 10
             public uint logloot;                                 // 19 log loot, enum { false, true, }; Default: false
             public uint linkedTrap;                              // 20 linkedTrap, References: GameObjects, NoValue = 0
+            public uint PlayOpenAnimationonOpening;              // 21 Play Open Animation on Opening, enum { false, true, }; Default: false
         }
 
         public struct challengemodereward
         {
             public uint chestLoot;                               // 0 chestLoot, References: Treasure, NoValue = 0
             public uint WhenAvailable;                           // 1 When Available, References: GameObjectDisplayInfo, NoValue = 0
+            public uint open;                                    // 2 open, References: Lock_, NoValue = 0
+            public uint openTextID;                              // 3 openTextID, References: BroadcastText, NoValue = 0
+        }
+
+        public struct multi
+        {
+            public uint MultiProperties;                         // 0 Multi Properties, References: MultiProperties, NoValue = 0
+        }
+
+        public struct siegeableMulti
+        {
+            public uint MultiProperties;                         // 0 Multi Properties, References: MultiProperties, NoValue = 0
+            public uint InitialDamage;                           // 1 Initial Damage, enum { None, Raw, Ratio, }; Default: None
+        }
+
+        public struct siegeableMO
+        {
+            public uint SiegeableProperties;                     // 0 Siegeable Properties, References: SiegeableProperties, NoValue = 0
+            public uint DoodadSetA;                              // 1 Doodad Set A, int, Min value: 0, Max value: 2147483647, Default value: 0
+            public uint DoodadSetB;                              // 2 Doodad Set B, int, Min value: 0, Max value: 2147483647, Default value: 0
+            public uint DoodadSetC;                              // 3 Doodad Set C, int, Min value: 0, Max value: 2147483647, Default value: 0
+            public int SpawnMap;                                 // 4 Spawn Map, References: Map, NoValue = -1
+            public int AreaNameSet;                              // 5 Area Name Set (Index), int, Min value: -2147483648, Max value: 2147483647, Default value: 0
+        }
+
+        public struct pvpReward
+        {
+            public uint chestLoot;                               // 0 chestLoot, References: Treasure, NoValue = 0
+            public uint WhenAvailable;                           // 1 When Available, References: GameObjectDisplayInfo, NoValue = 0
+            public uint open;                                    // 2 open, References: Lock_, NoValue = 0
+            public uint openTextID;                              // 3 openTextID, References: BroadcastText, NoValue = 0
         }
         #endregion
     }

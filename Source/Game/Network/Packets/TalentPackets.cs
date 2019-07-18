@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,9 +71,8 @@ namespace Game.Network.Packets
         public override void Read()
         {
             uint count = _worldPacket.ReadBits<uint>(6);
-
-            for (uint i = 0; i < count; ++i)
-                Talents.Add(_worldPacket.ReadUInt16());
+            for (int i = 0; i < count; ++i)
+                Talents[i] = _worldPacket.ReadUInt16();
         }
 
         public Array<ushort> Talents = new Array<ushort>(PlayerConst.MaxTalentTiers);
@@ -152,12 +151,12 @@ namespace Game.Network.Packets
 
         public override void Read()
         {
-            int size = _worldPacket.ReadBits<int>(6);
+            uint size = _worldPacket.ReadUInt32();
             for (int i = 0; i < size; ++i)
-                Talents[i] = _worldPacket.ReadUInt16();
+                Talents[i].Read(_worldPacket);
         }
 
-        public Array<ushort> Talents = new Array<ushort>(6);
+        public Array<PvPTalent> Talents = new Array<PvPTalent>(4);
     }
 
     class LearnPvpTalentsFailed : ServerPacket
@@ -170,16 +169,34 @@ namespace Game.Network.Packets
             _worldPacket.WriteUInt32(SpellID);
             _worldPacket.WriteUInt32(Talents.Count);
 
-            foreach (var id in Talents)
-                _worldPacket.WriteUInt16(id);
+            foreach (var pvpTalent in Talents)
+                pvpTalent.Write(_worldPacket);
         }
 
         public uint Reason;
         public uint SpellID;
-        public List<ushort> Talents = new List<ushort>();
+        public List<PvPTalent> Talents = new List<PvPTalent>();
     }
 
     //Structs
+    public struct PvPTalent
+    {
+        public ushort PvPTalentID;
+        public byte Slot;
+
+        public void Read(WorldPacket data)
+        {
+            PvPTalentID = data.ReadUInt16();
+            Slot = data.ReadUInt8();
+        }
+
+        public void Write(WorldPacket data)
+        {
+            data.WriteUInt16(PvPTalentID);
+            data.WriteUInt8(Slot);
+        }
+    }
+
     struct GlyphBinding
     {
         public GlyphBinding(uint spellId, ushort glyphId)

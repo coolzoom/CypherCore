@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ namespace Game
         [WorldPacketHandler(ClientOpcodes.BattlePetSummon, Processing = PacketProcessing.Inplace)]
         void HandleBattlePetSummon(BattlePetSummon battlePetSummon)
         {
-            if (_player.GetGuidValue(PlayerFields.SummonedBattlePetId) != battlePetSummon.PetGuid)
+            if (_player.GetGuidValue(ActivePlayerFields.SummonedBattlePetId) != battlePetSummon.PetGuid)
                 GetBattlePetMgr().SummonPet(battlePetSummon.PetGuid);
             else
                 GetBattlePetMgr().DismissPet();

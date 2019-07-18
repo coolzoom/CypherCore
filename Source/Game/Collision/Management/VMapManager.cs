@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,13 @@ namespace Game.Collision
         Error,
         OK,
         Ignored
+    }
+
+    public enum LoadResult
+    {
+        Success,
+        FileNotFound,
+        VersionMismatch
     }
 
     public class VMapManager : Singleton<VMapManager>
@@ -124,7 +131,7 @@ namespace Game.Collision
             }
         }
 
-        public bool isInLineOfSight(uint mapId, float x1, float y1, float z1, float x2, float y2, float z2)
+        public bool isInLineOfSight(uint mapId, float x1, float y1, float z1, float x2, float y2, float z2, ModelIgnoreFlags ignoreFlags)
         {
             if (!isLineOfSightCalcEnabled() || Global.DisableMgr.IsDisabledFor(DisableType.VMAP, mapId, null, DisableFlags.VmapLOS))
                 return true;
@@ -135,7 +142,7 @@ namespace Game.Collision
                 Vector3 pos1 = convertPositionToInternalRep(x1, y1, z1);
                 Vector3 pos2 = convertPositionToInternalRep(x2, y2, z2);
                 if (pos1 != pos2)
-                    return instanceTree.isInLineOfSight(pos1, pos2);
+                    return instanceTree.isInLineOfSight(pos1, pos2, ignoreFlags);
             }
 
             return true;
@@ -232,7 +239,7 @@ namespace Game.Collision
             return false;
         }
 
-        public WorldModel acquireModelInstance(string filename)
+        public WorldModel acquireModelInstance(string filename, uint flags = 0)
         {
             lock (LoadedModelFilesLock)
             {
@@ -248,6 +255,9 @@ namespace Game.Collision
                     }
 
                     Log.outDebug(LogFilter.Maps, "VMapManager: loading file '{0}'", filename);
+
+                    worldmodel.Flags = flags;
+
                     model = new ManagedModel();
                     model.setModel(worldmodel);
 
@@ -277,7 +287,7 @@ namespace Game.Collision
             }
         }
 
-        public bool existsMap(uint mapId, uint x, uint y)
+        public LoadResult existsMap(uint mapId, uint x, uint y)
         {
             return StaticMapTree.CanLoadMap(VMapPath, mapId, x, y, this);
         }

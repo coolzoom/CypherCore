@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -114,10 +114,12 @@ namespace Game.Network.Packets
         {
             ArbiterGUID = _worldPacket.ReadPackedGuid();
             Accepted = _worldPacket.HasBit();
+            Forfeited = _worldPacket.HasBit();
         }
 
         public ObjectGuid ArbiterGUID;
         public bool Accepted;
+        public bool Forfeited;
     }
 
     public class DuelWinner : ServerPacket

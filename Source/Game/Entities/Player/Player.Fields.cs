@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -237,6 +237,7 @@ namespace Game.Entities
         ulong m_GuildIdInvited;
         DeclinedName _declinedname;
         Runes m_runes = new Runes();
+        uint m_hostileReferenceCheckTimer;
         uint m_drunkTimer;
         long m_logintime;
         long m_Last_tick;
@@ -319,13 +320,13 @@ namespace Game.Entities
             for (byte i = 0; i < PlayerConst.MaxSpecializations; ++i)
             {
                 Talents[i] = new Dictionary<uint, PlayerSpellState>();
-                PvpTalents[i] = new Dictionary<uint, PlayerSpellState>();
+                PvpTalents[i] = new Array<uint>(PlayerConst.MaxPvpTalentSlots, 0);
                 Glyphs[i] = new List<uint>();
             }
         }
 
         public Dictionary<uint, PlayerSpellState>[] Talents = new Dictionary<uint, PlayerSpellState>[PlayerConst.MaxSpecializations];
-        public Dictionary<uint, PlayerSpellState>[] PvpTalents = new Dictionary<uint, PlayerSpellState>[PlayerConst.MaxSpecializations];
+        public Array<uint>[] PvpTalents = new Array<uint>[PlayerConst.MaxSpecializations];
         public List<uint>[] Glyphs = new List<uint>[PlayerConst.MaxSpecializations];
         public uint ResetTalentsCost;
         public long ResetTalentsTime;

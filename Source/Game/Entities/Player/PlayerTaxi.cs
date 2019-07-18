@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -225,13 +225,13 @@ namespace Game.Entities
 
         public bool IsTaximaskNodeKnown(uint nodeidx)
         {
-            byte field = (byte)((nodeidx - 1) / 8);
+            uint field = (nodeidx - 1) / 8;
             uint submask = (uint)(1 << (int)((nodeidx - 1) % 8));
             return (m_taximask[field] & submask) == submask;
         }
         public bool SetTaximaskNode(uint nodeidx)
         {
-            byte field = (byte)((nodeidx - 1) / 8);
+            uint field = (nodeidx - 1) / 8;
             uint submask = (uint)(1 << (int)((nodeidx - 1) % 8));
             if ((m_taximask[field] & submask) != submask)
             {

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,10 +78,19 @@ namespace Game
                     HotfixResponse.HotfixData hotfixData = new HotfixResponse.HotfixData();
                     hotfixData.ID = hotfixId;
                     hotfixData.RecordID = hotfix;
-                    if (storage.HasRecord((uint)hotfixData.RecordID))
+                    if (storage != null && storage.HasRecord((uint)hotfixData.RecordID))
                     {
                         hotfixData.Data.HasValue = true;
                         storage.WriteRecord((uint)hotfixData.RecordID, GetSessionDbcLocale(), hotfixData.Data.Value);
+                    }
+                    else
+                    {
+                        byte[] blobData = Global.DB2Mgr.GetHotfixBlobData(MathFunctions.Pair64_HiPart(hotfixId), hotfix);
+                        if (blobData != null)
+                        {
+                            hotfixData.Data.HasValue = true;
+                            hotfixData.Data.Value.WriteBytes(blobData);
+                        }
                     }
 
                     hotfixQueryResponse.Hotfixes.Add(hotfixData);

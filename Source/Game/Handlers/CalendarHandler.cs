@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,8 +60,7 @@ namespace Game
                 CalendarSendCalendarEventInfo eventInfo;
                 eventInfo.EventID = calendarEvent.EventId;
                 eventInfo.Date = calendarEvent.Date;
-                Guild guild = Global.GuildMgr.GetGuildById(calendarEvent.GuildId);
-                eventInfo.EventGuildID = guild ? guild.GetGUID() : ObjectGuid.Empty;
+                eventInfo.EventClubID = calendarEvent.GuildId;
                 eventInfo.EventName = calendarEvent.Title;
                 eventInfo.EventType = calendarEvent.EventType;
                 eventInfo.Flags = calendarEvent.Flags;
@@ -107,12 +106,12 @@ namespace Game
                 Global.CalendarMgr.SendCalendarCommandResult(GetPlayer().GetGUID(), CalendarError.EventInvalid);
         }
 
-        [WorldPacketHandler(ClientOpcodes.CalendarGuildFilter)]
-        void HandleCalendarGuildFilter(CalendarGuildFilter calendarGuildFilter)
+        [WorldPacketHandler(ClientOpcodes.CalendarCommunityFilter)]
+        void HandleCalendarCommunityFilter(CalendarCommunityFilter calendarCommunityFilter)
         {
             Guild guild = Global.GuildMgr.GetGuildById(GetPlayer().GetGuildId());
             if (guild)
-                guild.MassInviteToEvent(this, calendarGuildFilter.MinLevel, calendarGuildFilter.MaxLevel, calendarGuildFilter.MaxRankOrder);
+                guild.MassInviteToEvent(this, calendarCommunityFilter.MinLevel, calendarCommunityFilter.MaxLevel, calendarCommunityFilter.MaxRankOrder);
         }
 
         [WorldPacketHandler(ClientOpcodes.CalendarAddEvent)]

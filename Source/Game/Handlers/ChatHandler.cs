@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -330,7 +330,7 @@ namespace Game
                 case ChatMsg.RaidWarning:
                     {
                         Group group = GetPlayer().GetGroup();
-                        if (!group || !group.isRaidGroup() || !(group.IsLeader(GetPlayer().GetGUID()) || group.IsAssistant(GetPlayer().GetGUID())) || group.isBGGroup())
+                        if (!group || !(group.isRaidGroup() || WorldConfig.GetBoolValue(WorldCfg.ChatPartyRaidWarnings)) || !(group.IsLeader(GetPlayer().GetGUID()) || group.IsAssistant(GetPlayer().GetGUID())) || group.isBGGroup())
                             return;
 
                         Global.ScriptMgr.OnPlayerChat(GetPlayer(), type, lang, msg, group);
@@ -379,53 +379,20 @@ namespace Game
             }
         }
 
-        [WorldPacketHandler(ClientOpcodes.ChatAddonMessageGuild)]
-        [WorldPacketHandler(ClientOpcodes.ChatAddonMessageOfficer)]
-        [WorldPacketHandler(ClientOpcodes.ChatAddonMessageParty)]
-        [WorldPacketHandler(ClientOpcodes.ChatAddonMessageRaid)]
-        [WorldPacketHandler(ClientOpcodes.ChatAddonMessageInstanceChat)]
-        void HandleChatAddonMessage(ChatAddonMessage packet)
+        [WorldPacketHandler(ClientOpcodes.ChatAddonMessage)]
+        [WorldPacketHandler(ClientOpcodes.ChatAddonMessageTargeted)]
+        void HandleChatAddonMessage(ChatAddonMessage chatAddonMessage)
         {
-            ChatMsg type;
-
-            switch (packet.GetOpcode())
-            {
-                case ClientOpcodes.ChatAddonMessageGuild:
-                    type = ChatMsg.Guild;
-                    break;
-                case ClientOpcodes.ChatAddonMessageOfficer:
-                    type = ChatMsg.Officer;
-                    break;
-                case ClientOpcodes.ChatAddonMessageParty:
-                    type = ChatMsg.Party;
-                    break;
-                case ClientOpcodes.ChatAddonMessageRaid:
-                    type = ChatMsg.Raid;
-                    break;
-                case ClientOpcodes.ChatAddonMessageInstanceChat:
-                    type = ChatMsg.InstanceChat;
-                    break;
-                default:
-                    Log.outError(LogFilter.Network, "HandleChatAddonMessage: Unknown addon chat opcode ({0})", packet.GetOpcode());
-                    return;
-            }
-
-            HandleChatAddon(type, packet.Prefix, packet.Text);
+            HandleChatAddon(chatAddonMessage.Params.Type, chatAddonMessage.Params.Prefix, chatAddonMessage.Params.Text, chatAddonMessage.Params.IsLogged);
         }
 
-        [WorldPacketHandler(ClientOpcodes.ChatAddonMessageWhisper)]
-        void HandleChatAddonMessageWhisper(ChatAddonMessageWhisper packet)
+        [WorldPacketHandler(ClientOpcodes.ChatAddonMessageTargeted)]
+        void HandleChatAddonMessageTargeted(ChatAddonMessageTargeted chatAddonMessageTargeted)
         {
-            HandleChatAddon(ChatMsg.Whisper, packet.Prefix, packet.Text, packet.Target);
+            HandleChatAddon(chatAddonMessageTargeted.Params.Type, chatAddonMessageTargeted.Params.Prefix, chatAddonMessageTargeted.Params.Text, chatAddonMessageTargeted.Params.IsLogged, chatAddonMessageTargeted.Target);
         }
 
-        [WorldPacketHandler(ClientOpcodes.ChatAddonMessageChannel)]
-        void HandleChatAddonMessageChannel(ChatAddonMessageChannel chatAddonMessageChannel)
-        {
-            HandleChatAddon(ChatMsg.Channel, chatAddonMessageChannel.Prefix, chatAddonMessageChannel.Text, chatAddonMessageChannel.Target);
-        }
-
-        void HandleChatAddon(ChatMsg type, string prefix, string text, string target = "")
+        void HandleChatAddon(ChatMsg type, string prefix, string text, bool isLogged, string target = "")
         {
             Player sender = GetPlayer();
 
@@ -444,7 +411,7 @@ namespace Game
                     {
                         Guild guild = Global.GuildMgr.GetGuildById(sender.GetGuildId());
                         if (guild)
-                            guild.BroadcastAddonToGuild(this, type == ChatMsg.Officer, text, prefix);
+                            guild.BroadcastAddonToGuild(this, type == ChatMsg.Officer, text, prefix, isLogged);
                     }
                     break;
                 case ChatMsg.Whisper:
@@ -458,7 +425,7 @@ namespace Game
                     if (!receiver)
                         break;
 
-                    sender.WhisperAddon(text, prefix, receiver);
+                    sender.WhisperAddon(text, prefix, isLogged, receiver);
                     break;
                 // Messages sent to "RAID" while in a party will get delivered to "PARTY"
                 case ChatMsg.Party:
@@ -481,14 +448,14 @@ namespace Game
                         }
 
                         ChatPkt data = new ChatPkt();
-                        data.Initialize(type, Language.Addon, sender, null, text, 0, "", LocaleConstant.enUS, prefix);
+                        data.Initialize(type, isLogged ? Language.AddonLogged : Language.Addon, sender, null, text, 0, "", LocaleConstant.enUS, prefix);
                         group.BroadcastAddonMessagePacket(data, prefix, true, subGroup, sender.GetGUID());
                         break;
                     }
                 case ChatMsg.Channel:
                     Channel chn = ChannelManager.GetChannelForPlayerByNamePart(target, sender);
                     if (chn != null)
-                        chn.AddonSay(sender.GetGUID(), prefix, text);
+                        chn.AddonSay(sender.GetGUID(), prefix, text, isLogged);
                     break;
 
                 default:
@@ -595,7 +562,7 @@ namespace Game
             if (em == null)
                 return;
 
-            uint emote_anim = em.EmoteID;
+            uint emote_anim = em.EmoteId;
 
             switch ((Emote)emote_anim)
             {

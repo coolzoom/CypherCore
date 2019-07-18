@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -317,6 +317,11 @@ namespace Game.Maps
                                 uint resInterval = GetCombatResurrectionChargeInterval();
                                 InitializeCombatResurrections(1, resInterval);
                                 SendEncounterStart(1, 9, resInterval, resInterval);
+
+                                var playerList = instance.GetPlayers();
+                                foreach (var player in playerList)
+                                        if (player.IsAlive())
+                                            player.ProcSkillsAndAuras(null, ProcFlags.EncounterStart, ProcFlags.None, ProcFlagsSpellType.MaskAll, ProcFlagsSpellPhase.None, ProcFlagsHit.None, null, null, null);
                                 break;
                             }
                         case EncounterState.Fail:

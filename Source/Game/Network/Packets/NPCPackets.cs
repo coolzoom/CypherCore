@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -209,15 +209,18 @@ namespace Game.Network.Packets
 
         public override void Write()
         {
-            _worldPacket.WriteBits(Flags, 14);
-            _worldPacket.WriteBits(Name.GetByteCount(), 6);
+            _worldPacket.WriteUInt32(ID);
             _worldPacket.WriteFloat(Pos.X);
             _worldPacket.WriteFloat(Pos.Y);
             _worldPacket.WriteUInt32(Icon);
             _worldPacket.WriteUInt32(Importance);
+            _worldPacket.WriteBits(Flags, 14);
+            _worldPacket.WriteBits(Name.GetByteCount(), 6);
+            _worldPacket.FlushBits();
             _worldPacket.WriteString(Name);
         }
 
+        public uint ID;
         public uint Flags;
         public Vector2 Pos;
         public uint Icon;

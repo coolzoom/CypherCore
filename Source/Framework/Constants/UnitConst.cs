@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ namespace Framework.Constants
     {
         HasLowerAnimForEnter = 0x01,
         HasLowerAnimForRide = 0x02,
-        Unk3 = 0x04,
+        DisableGravity = 0x04, // Passenger will not be affected by gravity
         ShouldUseVehSeatExitAnimOnVoluntaryExit = 0x08,
         Unk5 = 0x10,
         Unk6 = 0x20,

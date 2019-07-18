@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -106,7 +106,8 @@ namespace Game.Network.Packets
         public override void Read()
         {
             Token = _worldPacket.ReadUInt32();
-            Secret.AddRange(_worldPacket.ReadBytes((uint)Secret.Capacity));
+            for (var i = 0; i < Secret.GetLimit(); ++i)
+                Secret[i] = _worldPacket.ReadUInt8();
         }
 
         public uint Token;

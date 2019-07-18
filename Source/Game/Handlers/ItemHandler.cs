@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -507,7 +507,7 @@ namespace Game
             Item pItem = _player.GetItemFromBuyBackSlot(packet.Slot);
             if (pItem != null)
             {
-                uint price = _player.GetUInt32Value(PlayerFields.BuyBackPrice1 + (int)(packet.Slot - InventorySlots.BuyBackStart));
+                uint price = _player.GetUInt32Value(ActivePlayerFields.BuyBackPrice + (int)(packet.Slot - InventorySlots.BuyBackStart));
                 if (!_player.HasEnoughMoney(price))
                 {
                     _player.SendBuyError(BuyResult.NotEnoughtMoney, creature, pItem.GetEntry());

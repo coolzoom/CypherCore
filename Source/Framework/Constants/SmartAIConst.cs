@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -273,7 +273,7 @@ namespace Framework.Constants
         SetOrientation = 66,     //
         CreateTimedEvent = 67,     // Id, Initialmin, Initialmax, Repeatmin(Only If It Repeats), Repeatmax(Only If It Repeats), Chance
         Playmovie = 68,     // Entry
-        MoveToPos = 69,     // PointId, transport, disablePathfinding
+        MoveToPos = 69,     // PointId, transport, disablePathfinding, ContactDistance
         RespawnTarget = 70,     //
         Equip = 71,     // Entry, Slotmask Slot1, Slot2, Slot3   , Only Slots With Mask Set Will Be Sent To Client, Bits Are 1, 2, 4, Leaving Mask 0 Is Defaulted To Mask 7 (Send All), Slots1-3 Are Only Used If No Entry Is Set
         CloseGossip = 72,     // None

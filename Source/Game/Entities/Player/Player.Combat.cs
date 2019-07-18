@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -118,7 +118,7 @@ namespace Game.Entities
         }
         public float GetRatingBonusValue(CombatRating cr)
         {
-            float baseResult = GetFloatValue(PlayerFields.CombatRating1 + (int)cr) * GetRatingMultiplier(cr);
+            float baseResult = GetFloatValue(ActivePlayerFields.CombatRating + (int)cr) * GetRatingMultiplier(cr);
             if (cr != CombatRating.ResiliencePlayerDamage)
                 return baseResult;
             return (float)(1.0f - Math.Pow(0.99f, baseResult)) * 100.0f;
@@ -189,9 +189,9 @@ namespace Game.Entities
             switch (attType)
             {
                 case WeaponAttackType.BaseAttack:
-                    return baseExpertise + GetUInt32Value(PlayerFields.Expertise) / 4.0f;
+                    return baseExpertise + GetUInt32Value(ActivePlayerFields.Expertise) / 4.0f;
                 case WeaponAttackType.OffAttack:
-                    return baseExpertise + GetUInt32Value(PlayerFields.OffhandExpertise) / 4.0f;
+                    return baseExpertise + GetUInt32Value(ActivePlayerFields.OffhandExpertise) / 4.0f;
                 default:
                     break;
             }

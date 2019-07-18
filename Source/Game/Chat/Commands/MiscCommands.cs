@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -192,7 +192,7 @@ namespace Game.Chat
             float zoneX = obj.GetPositionX();
             float zoneY = obj.GetPositionY();
 
-            Global.DB2Mgr.Map2ZoneCoordinates(zoneId, ref zoneX, ref zoneY);
+            Global.DB2Mgr.Map2ZoneCoordinates((int)zoneId, ref zoneX, ref zoneY);
 
             Map map = obj.GetMap();
             float groundZ = map.GetHeight(obj.GetPhaseShift(), obj.GetPositionX(), obj.GetPositionY(), MapConst.MaxHeight);
@@ -263,7 +263,7 @@ namespace Game.Chat
                 {
                     var record = CliDB.ItemSparseStorage.Values.FirstOrDefault(itemSparse =>
                     {
-                        for (LocaleConstant i = 0; i < LocaleConstant.Max; ++i)
+                        for (LocaleConstant i = 0; i < LocaleConstant.Total; ++i)
                             if (itemName == itemSparse.Display[i])
                                 return true;
                         return false;
@@ -1189,8 +1189,8 @@ namespace Game.Chat
             }
 
             uint val = (1u << (area.AreaBit % 32));
-            uint currFields = playerTarget.GetUInt32Value(PlayerFields.ExploredZones1 + offset);
-            playerTarget.SetUInt32Value(PlayerFields.ExploredZones1 + offset, (currFields | val));
+            uint currFields = playerTarget.GetUInt32Value(ActivePlayerFields.ExploredZones + offset);
+            playerTarget.SetUInt32Value(ActivePlayerFields.ExploredZones + offset, (currFields | val));
 
             handler.SendSysMessage(CypherStrings.ExploreArea);
             return true;
@@ -1230,8 +1230,8 @@ namespace Game.Chat
             }
 
             uint val = (1u << (area.AreaBit % 32));
-            uint currFields = playerTarget.GetUInt32Value(PlayerFields.ExploredZones1 + offset);
-            playerTarget.SetUInt32Value(PlayerFields.ExploredZones1 + offset, (currFields ^ val));
+            uint currFields = playerTarget.GetUInt32Value(ActivePlayerFields.ExploredZones + offset);
+            playerTarget.SetUInt32Value(ActivePlayerFields.ExploredZones + offset, (currFields ^ val));
 
             handler.SendSysMessage(CypherStrings.UnexploreArea);
             return true;

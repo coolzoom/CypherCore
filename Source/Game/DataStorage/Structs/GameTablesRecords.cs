@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,11 +98,6 @@ namespace Game.DataStorage
         public float JewelryMultiplier;
     }
 
-    public sealed class GtHonorLevelRecord
-    {
-        public float[] Prestige = new float[33];
-    }
-
     public sealed class GtHpPerStaRecord
     {
         public float Health;
@@ -170,6 +165,7 @@ namespace Game.DataStorage
         public float Gem2;
         public float Gem3;
         public float Health;
+        public float DamageReplaceStat;
     }
 
     public sealed class GtXpRecord

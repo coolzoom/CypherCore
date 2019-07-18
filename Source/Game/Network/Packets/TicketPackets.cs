@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -148,8 +148,16 @@ namespace Game.Network.Packets
             bool hasGuildInfo = _worldPacket.HasBit();
             bool hasLFGListSearchResult = _worldPacket.HasBit();
             bool hasLFGListApplicant = _worldPacket.HasBit();
+            bool hasClubMessage = _worldPacket.HasBit();
 
             _worldPacket.ResetBitPos();
+
+            if (hasClubMessage)
+            {
+                CommunityMessage.HasValue = true;
+                CommunityMessage.Value.IsPlayerUsingVoice = _worldPacket.HasBit();
+                _worldPacket.ResetBitPos();
+            }
 
             if (hasMailInfo)
             {
@@ -201,6 +209,7 @@ namespace Game.Network.Packets
         public Optional<SupportTicketGuildInfo> GuildInfo;
         public Optional<SupportTicketLFGListSearchResult> LFGListSearchResult;
         public Optional<SupportTicketLFGListApplicant> LFGListApplicant;
+        public Optional<SupportTicketCommunityMessage> CommunityMessage;
 
         public struct SupportTicketChatLine
         {
@@ -351,6 +360,11 @@ namespace Game.Network.Packets
 
             RideTicket RideTicket;
             string Comment;
+        }
+
+        public struct SupportTicketCommunityMessage
+        {
+            public bool IsPlayerUsingVoice;
         }
     }
 

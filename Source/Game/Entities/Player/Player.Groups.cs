@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -233,6 +233,8 @@ namespace Game.Entities
                     return IsInSameRaidWith(p);
                 case 2: 
                     return GetTeam() == p.GetTeam();
+                case 3:
+                    return false;
             }
         }
         public bool IsInSameGroupWith(Player p)

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,12 @@ namespace Game.AI
             // This is needed for charmed creatures, as once their target was reset other effects can trigger threat
             if (me.IsCharmed() && me.GetVictim() == me.GetCharmer())
                 return true;
+
+            // dont allow pets to follow targets far away from owner
+            Unit owner = me.GetCharmerOrOwner();
+            if (owner)
+                if (owner.GetExactDist(me) >= (owner.GetVisibilityRange() - 10.0f))
+                    return true;
 
             return !me.IsValidAttackTarget(me.GetVictim());
         }

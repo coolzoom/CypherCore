@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -136,6 +136,13 @@ namespace Game.Maps
                 instanceSave.SetToDelete(true);
                 m_instanceSaveById.Remove(InstanceId);
             }
+        }
+
+        public void UnloadInstanceSave(uint InstanceId)
+        {
+            InstanceSave save = GetInstanceSave(InstanceId);
+            if (save != null)
+                save.UnloadIfEmpty();
         }
 
         public void LoadInstances()
@@ -711,7 +718,7 @@ namespace Game.Maps
           Global.InstanceSaveMgr.DeleteInstanceFromDB(GetInstanceId());
         }
 
-        bool UnloadIfEmpty()
+        public bool UnloadIfEmpty()
         {
             if (m_playerList.Empty() && m_groupList.Empty())
             {

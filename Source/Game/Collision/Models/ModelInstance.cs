@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Framework.Constants;
 using Framework.GameMath;
 using System;
 using System.IO;
@@ -93,7 +94,7 @@ namespace Game.Collision
             iInvScale = 1.0f / iScale;
         }
 
-        public bool intersectRay(Ray pRay, ref float pMaxDist, bool pStopAtFirstHit)
+        public bool intersectRay(Ray pRay, ref float pMaxDist, bool pStopAtFirstHit, ModelIgnoreFlags ignoreFlags)
         {
             if (iModel == null)
                 return false;
@@ -106,7 +107,7 @@ namespace Game.Collision
             Vector3 p = iInvRot * (pRay.Origin - iPos) * iInvScale;
             Ray modRay = new Ray(p, iInvRot * pRay.Direction);
             float distance = pMaxDist * iInvScale;
-            bool hit = iModel.IntersectRay(modRay, ref distance, pStopAtFirstHit);
+            bool hit = iModel.IntersectRay(modRay, ref distance, pStopAtFirstHit, ignoreFlags);
             if (hit)
             {
                 distance *= iScale;

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ namespace Game.Entities
             objectTypeId = TypeId.Corpse;
             objectTypeMask |= TypeMask.Corpse;
 
-            m_updateFlag = UpdateFlag.StationaryPosition;
+            m_updateFlag.Stationary = true;
 
             valuesCount = (int)CorpseFields.End;
 

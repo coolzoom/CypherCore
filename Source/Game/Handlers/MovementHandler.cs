@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -201,6 +201,12 @@ namespace Game
                 }
                 else
                     plrMover.RemoveFlag(PlayerFields.Flags, PlayerFlags.IsOutOfBounds);
+
+                if (opcode == ClientOpcodes.MoveJump)
+                { 
+                    plrMover.RemoveAurasWithInterruptFlags(SpellAuraInterruptFlags.Jump, 605); // Mind Control
+                    plrMover.ProcSkillsAndAuras(null, ProcFlags.Jump, ProcFlags.None, ProcFlagsSpellType.MaskAll, ProcFlagsSpellPhase.None, ProcFlagsHit.None, null, null, null);
+                }
             }
         }
 

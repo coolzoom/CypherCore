@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -189,7 +189,7 @@ namespace Game.Chat.Commands
 
                 titles &= ~titles2;                                     // remove not existed titles
 
-                target.SetUInt64Value(PlayerFields.KnownTitles, titles);
+                target.SetUInt64Value(ActivePlayerFields.KnownTitles, titles);
                 handler.SendSysMessage(CypherStrings.Done);
 
                 if (!target.HasTitle(target.GetUInt32Value(PlayerFields.ChosenTitle)))

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,14 +78,12 @@ namespace Game.Network.Packets
         public override void Read()
         {
             DosResponse = _worldPacket.ReadUInt64();
-            Build = _worldPacket.ReadUInt16();
-            BuildType = _worldPacket.ReadInt8();
             RegionID = _worldPacket.ReadUInt32();
             BattlegroupID = _worldPacket.ReadUInt32();
             RealmID = _worldPacket.ReadUInt32();
 
             for (var i = 0; i < LocalChallenge.GetLimit(); ++i)
-                LocalChallenge.Add(_worldPacket.ReadUInt8());
+                LocalChallenge[i] = _worldPacket.ReadUInt8();
 
             Digest = _worldPacket.ReadBytes(24);
 
@@ -95,8 +93,6 @@ namespace Game.Network.Packets
                 RealmJoinTicket = _worldPacket.ReadString(realmJoinTicketSize);
         }
 
-        public ushort Build;
-        public sbyte BuildType;
         public uint RegionID;
         public uint BattlegroupID;
         public uint RealmID;
@@ -145,6 +141,7 @@ namespace Game.Network.Packets
                 _worldPacket.WriteBit(SuccessInfo.Value.ForceCharacterTemplate);
                 _worldPacket.WriteBit(SuccessInfo.Value.NumPlayersHorde.HasValue);
                 _worldPacket.WriteBit(SuccessInfo.Value.NumPlayersAlliance.HasValue);
+                _worldPacket.WriteBit(SuccessInfo.Value.ExpansionTrialExpiration.HasValue);
                 _worldPacket.FlushBits();
 
                 {
@@ -163,6 +160,9 @@ namespace Game.Network.Packets
 
                 if (SuccessInfo.Value.NumPlayersAlliance.HasValue)
                     _worldPacket.WriteUInt16(SuccessInfo.Value.NumPlayersAlliance.Value);
+
+                if(SuccessInfo.Value.ExpansionTrialExpiration.HasValue)
+                    _worldPacket.WriteInt32(SuccessInfo.Value.ExpansionTrialExpiration.Value);
 
                 foreach (VirtualRealmInfo virtualRealm in SuccessInfo.Value.VirtualRealms)
                     virtualRealm.Write(_worldPacket);
@@ -216,6 +216,7 @@ namespace Game.Network.Packets
             public bool ForceCharacterTemplate; // forces the client to always use a character template when creating a new character. @see Templates. @todo implement
             public Optional<ushort> NumPlayersHorde; // number of horde players in this realm. @todo implement
             public Optional<ushort> NumPlayersAlliance; // number of alliance players in this realm. @todo implement
+            public Optional<int> ExpansionTrialExpiration; // expansion trial expiration unix timestamp
 
             public struct BillingInfo
             {

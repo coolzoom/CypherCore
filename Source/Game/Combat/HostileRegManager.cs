@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,6 +99,23 @@ namespace Game.Combat
             {
                 HostileReference nextRef = refe.next();
                 if (refe.GetSource().GetOwner().GetFactionTemplateEntry().Faction == faction)
+                {
+                    refe.removeReference();
+                }
+                refe = nextRef;
+            }
+        }
+
+        // delete all references out of specified range
+        public void deleteReferencesOutOfRange(float range)
+        {
+            HostileReference refe = getFirst();
+            range = range * range;
+            while (refe != null)
+            {
+                HostileReference nextRef = refe.next();
+                Unit owner = refe.GetSource().GetOwner();
+                if (!owner.isActiveObject() && owner.GetExactDist2dSq(getOwner()) > range)
                 {
                     refe.removeReference();
                 }

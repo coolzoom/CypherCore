@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,9 @@ namespace Game.Entities
         {
             _isMoving = true;
 
-            m_updateFlag = UpdateFlag.Transport | UpdateFlag.StationaryPosition | UpdateFlag.Rotation;
+            m_updateFlag.ServerTime = true;
+            m_updateFlag.Stationary = true;
+            m_updateFlag.Rotation = true;
         }
 
         public override void Dispose()

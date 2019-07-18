@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -245,9 +245,9 @@ namespace Game.Chat.Commands
             for (ushort i = 0; i < PlayerConst.ExploredZonesSize; ++i)
             {
                 if (flag != 0)
-                    handler.GetSession().GetPlayer().SetFlag(PlayerFields.ExploredZones1 + i, 0xFFFFFFFF);
+                    handler.GetSession().GetPlayer().SetFlag(ActivePlayerFields.ExploredZones + i, 0xFFFFFFFF);
                 else
-                    handler.GetSession().GetPlayer().SetFlag(PlayerFields.ExploredZones1 + i, 0);
+                    handler.GetSession().GetPlayer().SetFlag(ActivePlayerFields.ExploredZones + i, 0);
             }
 
             return true;

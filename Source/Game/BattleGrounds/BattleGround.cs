@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1235,9 +1235,10 @@ namespace Game.BattleGrounds
                 {
                     playerData.IsInWorld = true;
                     playerData.PrimaryTalentTree = (int)player.GetUInt32Value(PlayerFields.CurrentSpecId);
-                    playerData.PrimaryTalentTreeNameIndex = 0;
+                    playerData.Sex = (int)player.GetGender();
                     playerData.PlayerRace = player.GetRace();
-                    playerData.Prestige = player.GetPrestigeLevel();
+                    playerData.PlayerClass = (int)player.GetClass();
+                    playerData.HonorLevel = (int)player.GetHonorLevel();
                 }
 
                 pvpLogData.Players.Add(playerData);

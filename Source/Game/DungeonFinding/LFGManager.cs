@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2012-2018 CypherCore <http://github.com/CypherCore>
+ * Copyright (C) 2012-2019 CypherCore <http://github.com/CypherCore>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1504,7 +1504,7 @@ namespace Game.DungeonFinding
                 else if (dungeon.expansion > (uint)expansion)
                     lockStatus = LfgLockStatusType.InsufficientExpansion;
                 else if (Global.DisableMgr.IsDisabledFor(DisableType.Map, dungeon.map, player))
-                    lockStatus = LfgLockStatusType.RaidLocked;
+                    lockStatus = LfgLockStatusType.NotInSeason;
                 else if (Global.DisableMgr.IsDisabledFor(DisableType.LFGMap, dungeon.map, player))
                     lockStatus = LfgLockStatusType.RaidLocked;
                 else if (dungeon.difficulty > Difficulty.Normal && player.GetBoundInstance(dungeon.map, dungeon.difficulty) != null)
@@ -2156,7 +2156,7 @@ namespace Game.DungeonFinding
             minlevel = dbc.MinLevel;
             maxlevel = dbc.MaxLevel;
             difficulty = dbc.DifficultyID;
-            seasonal = dbc.Flags.HasAnyFlag(LfgFlags.Seasonal);
+            seasonal = dbc.Flags[0].HasAnyFlag(LfgFlags.Seasonal);
         }
 
         public uint id;
